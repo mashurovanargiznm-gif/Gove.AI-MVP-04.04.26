@@ -1,0 +1,229 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Gove.AI Copilot ЧСИ API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: transactions
+    description: Transaction operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /analyze:
+    post:
+      operationId: analyzePayment
+      tags: [transactions]
+      summary: Analyze incoming payment with AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyzeRequest"
+      responses:
+        "200":
+          description: Analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyzeResponse"
+        "500":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /approve:
+    post:
+      operationId: approveTransaction
+      tags: [transactions]
+      summary: Approve transaction - execute Solana transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApproveRequest"
+      responses:
+        "200":
+          description: Approval result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApproveResponse"
+        "500":
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /transactions:
+    get:
+      operationId: listTransactions
+      tags: [transactions]
+      summary: List all transactions
+      responses:
+        "200":
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionsResponse"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    AnalyzeRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Amount in KZT
+        description:
+          type: string
+        knp_code:
+          type: string
+          description: KNP code (purpose of payment)
+        oked_code:
+          type: string
+          description: OKED code (business activity)
+        receiver_iin:
+          type: string
+          description: Receiver IIN
+        debtor_bin:
+          type: string
+          description: Debtor BIN
+      required:
+        - amount
+        - description
+        - knp_code
+        - oked_code
+        - receiver_iin
+        - debtor_bin
+    AnalyzeResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        transaction_id:
+          type: string
+        decision:
+          type: string
+          enum: [allow, split, block]
+        percent:
+          type: integer
+        reason:
+          type: string
+        message:
+          type: string
+      required:
+        - success
+        - transaction_id
+        - decision
+        - percent
+        - reason
+    ApproveRequest:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+      required:
+        - transaction_id
+    ApproveResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        solana_signature:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+        withheld_amount:
+          type: number
+        percent:
+          type: integer
+      required:
+        - success
+        - status
+    TransactionsResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+      required:
+        - transactions
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        debtor_bin:
+          type: string
+        amount_kzt:
+          type: number
+        description:
+          type: string
+        knp_code:
+          type: string
+        oked_code:
+          type: string
+        receiver_iin:
+          type: string
+        ai_decision:
+          type: string
+        withheld_percent:
+          type: integer
+        ai_reason:
+          type: string
+        solana_signature:
+          type: string
+        status:
+          type: string
+      required:
+        - id
+        - created_at
+        - debtor_bin
+        - amount_kzt
+        - description
+        - knp_code
+        - oked_code
+        - receiver_iin
+        - ai_decision
+        - withheld_percent
+        - ai_reason
+        - status
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+      required:
+        - error

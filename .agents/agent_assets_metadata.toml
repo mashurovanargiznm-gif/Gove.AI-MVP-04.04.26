@@ -1,0 +1,38 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "cNQS68UM-UYm9kW8zlA6M"
+uri = "file://gove-ai-project.tar.gz"
+type = "unspecified"
+title = "Gove.AI — Исходный код проекта (tar.gz)"
+
+[[outputs]]
+id = "L8TdGmUrgzCDXvTVRQue8"
+uri = "file://gove-ai-project.zip"
+type = "unspecified"
+title = "Gove.AI — Исходный код проекта (.zip, 128 KB)"
+
+[[outputs]]
+id = "vxlq-FV5YisRsASIeqL8O"
+uri = "file://gove-ai-source.tar.gz"
+type = "unspecified"
+title = "Gove.AI — исходный код проекта"
+
+[[outputs]]
+id = "drvzUEkF1a8UTwk_188O_"
+uri = "file://gove-ai-source.zip"
+type = "unspecified"
+title = "Gove.AI — исходный код (ZIP для Windows)"
+
+[[outputs]]
+id = "wGbIibi5KILI19LpupOVP"
+uri = "file://gove-ai-github.zip"
+type = "unspecified"
+title = "Gove.AI — ZIP с README (284 KB)"
+
+[[outputs]]
+id = "naKPhd5tryJT680C7GiZ_"
+uri = "file://README.md"
+type = "text"
+title = "README.md — для GitHub"

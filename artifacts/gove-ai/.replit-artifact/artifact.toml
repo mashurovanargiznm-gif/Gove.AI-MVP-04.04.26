@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Gove.AI | Copilot ЧСИ"
+version = "1.0.0"
+id = "artifacts/gove-ai"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26196
+
+[services.development]
+run = "pnpm --filter @workspace/gove-ai run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/gove-ai", "run", "build" ]
+publicDir = "artifacts/gove-ai/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26196"
+BASE_PATH = "/"

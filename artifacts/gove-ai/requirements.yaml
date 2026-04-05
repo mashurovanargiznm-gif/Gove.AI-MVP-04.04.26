@@ -1,0 +1,11 @@
+packages:
+  "framer-motion": "For smooth panel toggling and row entrance animations in the dashboard"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility to efficiently merge Tailwind CSS classes"
+  "date-fns": "For formatting transaction timestamps"
+  "react-hook-form": "For robust handling of the emulator input form"
+  "@hookform/resolvers": "Zod resolver for form validation"
+
+notes:
+  - Assumes standard TanStack Query v5 usage with hooks exported from @workspace/api-client-react
+  - Assumes Tailwind v4 environment

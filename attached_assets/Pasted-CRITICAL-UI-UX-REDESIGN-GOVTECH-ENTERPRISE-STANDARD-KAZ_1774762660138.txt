@@ -1,0 +1,36 @@
+CRITICAL UI/UX REDESIGN: GOVTECH & ENTERPRISE STANDARD (KAZAKHSTAN E-GOV STYLE)
+
+Act as a Senior Enterprise UI/UX Designer. Completely redesign the frontend to look like a strict, official government portal (similar to e-Gov or national tax registry databases). 
+
+REMOVE all "cyberpunk", "hacker", or "crypto-startup" aesthetics. Remove neon glows and dark mode default. 
+
+1. COLOR PALETTE & TYPOGRAPHY:
+- Background: Clean very light gray/off-white (bg-slate-50).
+- Surfaces/Cards: Pure white (bg-white) with subtle, strict borders (border-slate-200), NO heavy shadows.
+- Primary Accent: Official State Blue (text-blue-700, bg-blue-600).
+- Text: High contrast dark slate (text-slate-800) for readability.
+- Font: Use strict, highly readable sans-serif (Inter, Roboto, or system-ui). Use monospaced fonts ONLY for BIN, IIN, and amounts.
+
+2. LAYOUT STRUCTURE (AИС ОИП Style):
+- TOP NAVBAR: 
+  - Left: Official-looking logo "Gove.AI | Реестр Исполнительного Производства".
+  - Center: Global Search Bar "🔍 Поиск по БИН / ИИН / Наименованию...".
+  - Right: Operator Profile "Инспектор: А. Ибраев | Департамент Юстиции".
+- MAIN CONTENT: Data-dense grid (Table).
+
+3. THE DATA GRID (TABLE):
+- This must look like a professional data grid, not a mobile app.
+- Compact padding (py-2 px-3) to fit many rows on screen.
+- Alternate row colors (Zebra striping) for readability.
+- Clear column headers: ДАТА, ДОЛЖНИК (БИН), ВЗЫСКАТЕЛЬ, СУММА ТРАНЗАКЦИИ, КНП/ОКЭД, РИСК-ФАКТОР (ИИ), ДЕЙСТВИЕ.
+
+4. BADGES & BUTTONS (Strict State Style):
+- Status Badges should be flat with muted colors:
+  - 0% (Safe): bg-green-100 text-green-800 "Разрешено"
+  - 15/30% (Split): bg-yellow-100 text-yellow-800 "Удержание"
+  - 100% (Block): bg-red-100 text-red-800 "Блокировка (Фрод)"
+- Buttons must be rectangular with slightly rounded corners (rounded-md), not fully pill-shaped.
+
+5. AI COPILOT PANEL (Right Side):
+- Rename to "Аналитическая справка ИИ".
+- Style it like an official document/report, not a chat bubble. Use bullet points for AI reasoning.

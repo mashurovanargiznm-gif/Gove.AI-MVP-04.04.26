@@ -1,0 +1,53 @@
+Act as a Lead Full-Stack GovTech Engineer. Build a production-ready MVP for "Gove.AI | Copilot ЧСИ" - an AI-powered Situation Center for Bailiffs to manage corporate debt via dynamic financial splitting.
+
+### TECH STACK
+- Backend: FastAPI (Python), Uvicorn.
+- Frontend: HTML, Vanilla JS, Tailwind CSS (Dark theme, Palantir-style dashboard).
+- DB: Supabase (supabase-py).
+- Blockchain: Solana Devnet (solana, solders).
+- AI Engine: Google Gemini 1.5 Flash (google-generativeai).
+- Notifications: Telegram Bot API (requests).
+
+### ENVIRONMENT VARIABLES (Read via os.environ)
+GOOGLE_API_KEY, SOLANA_PRIVATE_KEY, CREDITOR_PUBKEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, SUPABASE_URL, SUPABASE_KEY.
+
+### DB SCHEMA (Assume Supabase table `transactions` has these columns)
+id (uuid), created_at (timestamp), debtor_bin (text), amount_kzt (numeric), description (text), knp_code (text), oked_code (text), receiver_iin (text), ai_decision (text), withheld_percent (integer), ai_reason (text), solana_signature (text), status (text: 'pending', 'approved', 'blocked').
+
+### APP ARCHITECTURE & LOGIC
+1. API `/analyze` (Incoming Payment Simulation):
+   - Receives: amount, description, knp_code, oked_code, receiver_iin.
+   - Logic: Prompt Gemini 1.5 Flash. 
+     * Rule 1 (White): KNP for "Salary" or "Taxes" -> 0% split (allow 100%).
+     * Rule 2 (B2B Normal): Valid B2B payment -> 15% split.
+     * Rule 3 (Fraud): Mismatch between KNP and OKED (e.g., KNP "Consulting" but OKED "Construction") OR receiver_iin == "010101010101" -> 100% Block.
+   - Gemini returns strict JSON: {"decision": "allow/split/block", "percent": int, "reason": "Explainability text in Russian"}.
+   - Save to Supabase with status 'pending'. Return success to UI.
+
+2. API `/approve` (ChSI Action):
+   - Receives: transaction_id.
+   - Logic: 
+     - Calculate withheld amount in micro-SOL based on `percent`.
+     - Execute real Solana Devnet transfer using `solders` from SOLANA_PRIVATE_KEY to CREDITOR_PUBKEY.
+     - Send Telegram message: "⚖️ Gove.AI | ЧСИ Утвердил. Удержано: {percent}%. БИН: {debtor_bin}. TX: {solana_signature}".
+     - Update Supabase status to 'approved' or 'blocked'.
+
+3. API `/transactions` (Live Feed):
+   - Fetch all transactions from Supabase ordered by created_at DESC.
+
+### UI/UX DESIGN (Palantir "War Room" Style)
+Create a Single Page Application (index.html). Split into 3 columns:
+1. LEFT PANEL (Hidden by default, toggleable via button "Открыть Банк-Эмулятор"):
+   - A form to simulate debtor's bank transfer: Sum, Receiver IIN, KNP Dropdown (Salary, Taxes, B2B, Consulting), OKED Dropdown, Description.
+2. CENTER PANEL (Main Registry for ChSI):
+   - Top stats: "Обеленный ФОТ (KZT)", "Взыскано (KZT)", "Активных арестов: 2".
+   - A sleek data grid showing transactions. Status badges: Green (0%), Yellow (15%), Red (100% Block).
+   - Each row has an [Утвердить (Approve)] button. When clicked, call `/approve`, show loading spinner, then show Solana signature.
+3. RIGHT PANEL (AI Copilot & Explainability):
+   - When a row is clicked, show Gemini's reasoning here.
+   - Format: "⚠️ AI Analysis: [Text]". Highlight KNP/OKED mismatches.
+
+### CRITICAL REQUIREMENTS
+- Write fully functional code. NO place-holders like "TODO: Add Solana logic". Use actual `solders.system_program` to build the transaction.
+- Catch all API/Blockchain errors and display them nicely in the UI.
+- Use strict dark mode (slate-900), monospace fonts for numbers, and neon accents (blue/red/green).
